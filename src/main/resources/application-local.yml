@@ -8,4 +8,4 @@ jwt:
   secret: local-dev-secret-do-not-use-in-production-needs-256-bits-minimum
 
 cors:
-  allowed-origins: http://localhost:5173,http://localhost:3000
+  allowed-origins: http://localhost:5173,http://localhost:5174,http://localhost:8080,http://localhost:3000
