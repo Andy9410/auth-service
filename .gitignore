@@ -1,5 +1,6 @@
 target/
 .env
+application-neon.yml
 *.class
 *.jar
 *.war
