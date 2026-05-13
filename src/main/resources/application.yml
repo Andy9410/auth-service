@@ -30,3 +30,9 @@ management:
       base-path: /auth
       exposure:
         include: health, info
+
+sentry:
+  dsn: https://732e362cea19f0ead1f3efd9c76ae5c9@o4511384546377728.ingest.us.sentry.io/4511385099173888
+  environment: ${SENTRY_ENVIRONMENT:production}
+  send-default-pii: true
+  traces-sample-rate: 0.0
