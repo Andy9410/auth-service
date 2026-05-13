@@ -97,14 +97,23 @@ public class AuthService {
     }
 
     @Transactional
-    public void logout(String email, String accessToken) {
-        userRepository.findByEmail(email).ifPresent(user ->
-                refreshTokenRepository.revokeAllByUserId(user.getId()));
+    public void logout(String email, String accessToken, String refreshToken) {
+        if (email != null) {
+            userRepository.findByEmail(email).ifPresent(user ->
+                    refreshTokenRepository.revokeAllByUserId(user.getId()));
+        } else if (refreshToken != null) {
+            refreshTokenRepository.findByToken(refreshToken).ifPresent(rt -> {
+                rt.setRevoked(true);
+                refreshTokenRepository.save(rt);
+            });
+        }
         if (accessToken != null) {
-            revokedTokenRepository.save(new RevokedToken(
-                    tokenProvider.getJtiFromToken(accessToken),
-                    tokenProvider.getExpirationFromToken(accessToken)
-            ));
+            try {
+                revokedTokenRepository.save(new RevokedToken(
+                        tokenProvider.getJtiFromToken(accessToken),
+                        tokenProvider.getExpirationFromToken(accessToken)
+                ));
+            } catch (Exception ignored) {}
         }
     }
 
