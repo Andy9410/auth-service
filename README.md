@@ -204,6 +204,22 @@ docker-compose up --build
 
 ---
 
+# 💻 Desarrollo local
+
+Levantá solo la base de datos con Docker y corré el Spring Boot desde el IDE o CLI con el perfil `local`:
+
+```bash
+# 1. Iniciar Postgres en el puerto 5434
+docker compose up postgres -d
+
+# 2. Correr el servicio con perfil local
+./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+```
+
+El perfil `local` usa `localhost:5434/auth_db` con usuario/contraseña `postgres`.
+
+---
+
 # 🧱 Arquitectura
 
 El proyecto sigue:
