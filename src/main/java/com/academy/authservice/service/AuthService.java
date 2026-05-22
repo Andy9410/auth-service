@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.UUID;
 
+
 @Service
 public class AuthService {
 
@@ -124,7 +125,7 @@ public class AuthService {
     }
 
     private AuthResponse buildAuthResponse(User user) {
-        var accessToken = tokenProvider.generateAccessToken(user.getEmail(), user.getRole().getName());
+        var accessToken = tokenProvider.generateAccessToken(user.getEmail(), user.getRole().getName(), user.getName());
         var refreshToken = createRefreshToken(user);
         return AuthResponse.of(
                 accessToken,

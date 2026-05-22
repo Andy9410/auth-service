@@ -26,12 +26,13 @@ public class JwtTokenProvider {
         this.accessTokenExpirationMs = props.accessTokenExpirationMs();
     }
 
-    public String generateAccessToken(String email, String role) {
+    public String generateAccessToken(String email, String role, String firstName) {
         var now = new Date();
         return Jwts.builder()
                 .id(UUID.randomUUID().toString())
                 .subject(email)
                 .claim("role", role)
+                .claim("firstName",firstName)
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + accessTokenExpirationMs))
                 .signWith(signingKey)
