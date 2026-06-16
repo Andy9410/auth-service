@@ -1,5 +1,6 @@
 package com.academy.authservice.service;
 
+import com.academy.authservice.analytics.service.AnalyticsService;
 import com.academy.authservice.config.JwtProperties;
 import com.academy.authservice.dto.*;
 import com.academy.authservice.model.RefreshToken;
@@ -31,6 +32,7 @@ public class AuthService {
     private final JwtTokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
     private final JwtProperties jwtProperties;
+    private final AnalyticsService analyticsService;
 
     public AuthService(UserRepository userRepository,
                        RoleRepository roleRepository,
@@ -39,7 +41,8 @@ public class AuthService {
                        PasswordEncoder passwordEncoder,
                        JwtTokenProvider tokenProvider,
                        AuthenticationManager authenticationManager,
-                       JwtProperties jwtProperties) {
+                       JwtProperties jwtProperties,
+                       AnalyticsService analyticsService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.refreshTokenRepository = refreshTokenRepository;
@@ -48,6 +51,7 @@ public class AuthService {
         this.tokenProvider = tokenProvider;
         this.authenticationManager = authenticationManager;
         this.jwtProperties = jwtProperties;
+        this.analyticsService = analyticsService;
     }
 
     @Transactional
@@ -78,6 +82,7 @@ public class AuthService {
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         refreshTokenRepository.revokeAllByUserId(user.getId());
+        analyticsService.recordLogin(user.getEmail());
 
         return buildAuthResponse(user);
     }

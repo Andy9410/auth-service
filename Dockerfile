@@ -7,6 +7,9 @@ RUN mvn package -DskipTests -q
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
+RUN apk add --no-cache postgresql-client
 COPY --from=build /app/target/auth-service-*.jar app.jar
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 EXPOSE 8081
-ENTRYPOINT ["java", "-Xmx200m", "-jar", "app.jar"]
+ENTRYPOINT ["/entrypoint.sh"]
