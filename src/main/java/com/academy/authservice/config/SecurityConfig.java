@@ -1,5 +1,6 @@
 package com.academy.authservice.config;
 
+import com.academy.authservice.analytics.web.AnalyticsRequestLoggingFilter;
 import com.academy.authservice.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -29,11 +30,14 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtFilter;
+    private final AnalyticsRequestLoggingFilter analyticsRequestLoggingFilter;
     private final String[] allowedOrigins;
 
     public SecurityConfig(JwtAuthenticationFilter jwtFilter,
+                          AnalyticsRequestLoggingFilter analyticsRequestLoggingFilter,
                           @Value("${cors.allowed-origins:http://localhost:5173,http://localhost:5174,http://localhost:3000}") String[] allowedOrigins) {
         this.jwtFilter = jwtFilter;
+        this.analyticsRequestLoggingFilter = analyticsRequestLoggingFilter;
         this.allowedOrigins = allowedOrigins;
     }
 
@@ -55,6 +59,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(analyticsRequestLoggingFilter, JwtAuthenticationFilter.class)
                 .build();
     }
 
