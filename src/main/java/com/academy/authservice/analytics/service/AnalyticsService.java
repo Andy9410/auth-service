@@ -21,13 +21,16 @@ public class AnalyticsService {
     private final AnalyticsEventRepository repository;
     private final String serviceName;
     private final long slowThresholdMs;
+    private final boolean requestTrackingEnabled;
 
     public AnalyticsService(AnalyticsEventRepository repository,
                             @Value("${spring.application.name:auth-service}") String serviceName,
-                            @Value("${analytics.slow-request-threshold-ms:1000}") long slowThresholdMs) {
+                            @Value("${analytics.slow-request-threshold-ms:1000}") long slowThresholdMs,
+                            @Value("${analytics.request-tracking-enabled:true}") boolean requestTrackingEnabled) {
         this.repository = repository;
         this.serviceName = serviceName;
         this.slowThresholdMs = slowThresholdMs;
+        this.requestTrackingEnabled = requestTrackingEnabled;
     }
 
     public void recordEvent(AnalyticsEventRequest request) {
@@ -40,6 +43,9 @@ public class AnalyticsService {
                               Long durationMs,
                               String userEmail,
                               AnalyticsFeature feature) {
+        if (!requestTrackingEnabled) {
+            return;
+        }
         var event = new AnalyticsEvent();
         event.setEventType(AnalyticsEventType.REQUEST);
         event.setUserEmail(userEmail);
@@ -69,6 +75,9 @@ public class AnalyticsService {
                             String userEmail,
                             AnalyticsFeature feature,
                             String errorType) {
+        if (!requestTrackingEnabled && statusCode != null && statusCode < 500) {
+            return;
+        }
         var event = new AnalyticsEvent();
         event.setEventType(AnalyticsEventType.ERROR);
         event.setUserEmail(userEmail);

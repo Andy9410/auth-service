@@ -3,6 +3,11 @@ primary_region = "gru"
 
 [build]
 
+[env]
+  CORS_ALLOWED_ORIGINS = "https://learnsoft.uy,https://www.learnsoft.uy"
+  ANALYTICS_REQUEST_TRACKING_ENABLED = "false"
+  ANALYTICS_RETENTION_DAYS = "30"
+
 [http_service]
   internal_port = 8081
   force_https = true
