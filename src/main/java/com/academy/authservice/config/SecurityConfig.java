@@ -35,7 +35,7 @@ public class SecurityConfig {
 
     public SecurityConfig(JwtAuthenticationFilter jwtFilter,
                           AnalyticsRequestLoggingFilter analyticsRequestLoggingFilter,
-                          @Value("${cors.allowed-origins:http://localhost:5173,http://localhost:5174,http://localhost:3000}") String[] allowedOrigins) {
+                          @Value("${cors.allowed-origins:https://learnsoft.uy,https://www.learnsoft.uy,http://localhost:5173,http://localhost:5174,http://localhost:8080,http://localhost:3000}") String[] allowedOrigins) {
         this.jwtFilter = jwtFilter;
         this.analyticsRequestLoggingFilter = analyticsRequestLoggingFilter;
         this.allowedOrigins = allowedOrigins;
